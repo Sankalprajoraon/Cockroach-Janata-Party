@@ -1,59 +1,16 @@
-# ============================================
-#  buildspec.yml — AWS CodeBuild Instructions
-#  CodeBuild reads this file to know HOW to
-#  build your project automatically.
-# ============================================
-
 version: 0.2
 
-# Environment variables available during build
-env:
-  variables:
-    NODE_ENV: "production"
-
 phases:
-
-  # PHASE 1: Install — runs once at the start
   install:
     runtime-versions:
-      nodejs: 18          # Use Node.js version 18
+      nodejs: 18
     commands:
-      - echo "=== Installing dependencies ==="
-      - npm install       # Installs express (reads package.json)
-      - echo "=== Install complete ==="
+      - npm install
 
-  # PHASE 2: Pre-Build — runs before main build
-  pre_build:
-    commands:
-      - echo "=== Running pre-build checks ==="
-      - node --version    # Print Node version (useful for debugging)
-      - npm --version     # Print npm version
-      - echo "=== Pre-build done ==="
+build:
+  commands:
+    - echo "Build completed"
 
-  # PHASE 3: Build — main build step
-  build:
-    commands:
-      - echo "=== Build started on $(date) ==="
-      - npm test          # Run tests (just prints success for now)
-      - echo "=== Build complete ==="
-
-  # PHASE 4: Post-Build — runs after build succeeds
-  post_build:
-    commands:
-      - echo "=== Post-build: Packaging app ==="
-      - echo "Build completed on $(date)"
-      - echo "=== Cockroach Janata Party is ready to deploy! 🪳 ==="
-
-# ARTIFACTS — these files get sent to Elastic Beanstalk
 artifacts:
   files:
-    - "**/*"              # Include ALL files
-  exclude-paths:
-    - ".git/**"           # Exclude git history (not needed)
-    - "node_modules/**"   # Exclude node_modules (EB installs them fresh)
-  discard-paths: no       # Keep folder structure intact
-
-# CACHE — speeds up future builds by caching node_modules
-cache:
-  paths:
-    - "node_modules/**/*"
+    - '**/*'
